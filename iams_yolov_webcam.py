@@ -31,7 +31,7 @@ def run(source: str, weights: object = ROOT / 'best.pt',  # model.pt path(s)
         device: str = 0,  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img: bool = True,  # show results
         save_txt: bool = True,  # save results to *.txt
-        save_conf: bool = False,  # save confidences in --save-txt labels
+        save_conf: bool = False,  # save con 8     fidences in --save-txt labels
         save_crop: bool = False,  # save cropped prediction boxes
         nosave: bool = False,  # do not save images/videos
         classes: object = None,  # filter by class: --class 0, or --class 0 2 3
@@ -117,23 +117,18 @@ def run(source: str, weights: object = ROOT / 'best.pt',  # model.pt path(s)
                     # Write results
                     for *xyxy, conf, cls in reversed(det):
                         # print(*xyxy)
-                        if save_txt:  # Write to file
-
-                            xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(
-                                -1).tolist()  # normalized xywh
-                            line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-                            print(xywh)
-                            # with open(txt_path + '.txt', 'a') as f:
-                            #     f.write(('%g ' * len(line)).rstrip() % line + '\n')
+                        #
 
                         if save_img or save_crop or view_img:  # Add bbox to image
                             c = int(cls)  # integer class
+                            print(c)
                             label = None if hide_labels else (
                                 names[c] if hide_conf else f'{names[c]} {conf:.2f}')
+                            print(label)
                             annotator.box_label(xyxy, label, color=colors(c, True))
-                            if save_crop:
-                                save_one_box(xyxy, imc, file=save_dir / 'crops' / names[
-                                    c] / f'{p.stem}.jpg', BGR=True)
+                            # if save_crop:
+                            #     save_one_box(xyxy, imc, file=save_dir / 'crops' / names[
+                            #         c] / f'{p.stem}.jpg', BGR=True)
 
                     # Print time (inference-only)
                 LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
